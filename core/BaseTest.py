@@ -2,9 +2,11 @@ import pytest
 from selenium import webdriver
 import allure
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope='function')
 def browser():
-    driver = webdriver.Chrome()
-    driver.maximize_window()
+    options = webdriver.ChromeOptions()
+    options.add_argument("--lang=ru")
+    driver = webdriver.Remote(command_executor="http://5.181.109.28:4444", options=options)
     yield driver
-    driver.quit()
+    if driver:
+        driver.quit()
